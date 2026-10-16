@@ -230,3 +230,83 @@ public:
         cout << "\n";
     }
 };
+
+// Handle text input using getline, so song titles can contain spaces.
+string readText(const string& message) {
+    string text;
+    do {
+        cout << message;
+        getline(cin, text);
+        if (text.empty())
+            cout << "Please enter a value.\n";
+    } while (text.empty() && cin);
+    return text;
+}
+
+int readNumber(const string& message) {
+    int number;
+    while (true) {
+        cout << message;
+        if (cin >> number) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return number;
+        }
+        if (cin.eof())
+            return 11; // allow clean exit if input is closed
+        cout << "Invalid input. Please enter a number.\n";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+}
+
+int main() {
+    MusicPlaylist playlist;
+    int choice;
+
+    do {
+        cout << "\n========== MUSIC PLAYLIST MANAGER ==========\n";
+        cout << "1. Add Song\n";
+        cout << "2. Delete Song\n";
+        cout << "3. Display Playlist\n";
+        cout << "4. Display Playlist in Reverse\n";
+        cout << "5. Play Current Song\n";
+        cout << "6. Play Next Song\n";
+        cout << "7. Play Previous Song\n";
+        cout << "8. Play Complete Playlist\n";
+        cout << "9. Repeat All\n";
+        cout << "10. Show Current Song\n";
+        cout << "11. Exit\n";
+
+        choice = readNumber("Enter your choice: ");
+
+        switch (choice) {
+            case 1: {
+                string title = readText("Enter song title: ");
+                string artist = readText("Enter artist name: ");
+                playlist.addSong(title, artist);
+                break;
+            }
+            case 2: {
+                string title = readText("Enter title of song to delete: ");
+                playlist.deleteSong(title);
+                break;
+            }
+            case 3: playlist.displayPlaylist(); break;
+            case 4: playlist.displayReverse(); break;
+            case 5: playlist.playCurrent(); break;
+            case 6: playlist.playNext(); break;
+            case 7: playlist.playPrevious(); break;
+            case 8: playlist.playCompletePlaylist(); break;
+            case 9: {
+                int times = readNumber("How many times to repeat? ");
+                playlist.repeatAll(times);
+                break;
+            }
+            case 10: playlist.showCurrentSong(); break;
+            case 11: cout << "Exiting Music Playlist Manager.\n"; break;
+            default: cout << "Invalid choice. Enter a number from 1 to 11.\n";
+        }
+    } while (choice != 11);
+
+    return 0;
+}
