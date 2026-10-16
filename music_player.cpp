@@ -145,3 +145,88 @@ public:
             q = q->prev;         // now move backward using prev
         }
     }
+
+    void playCurrent() {
+        if (current == nullptr) {
+            cout << "Playlist is empty. Add a song first.\n";
+            return;
+        }
+        cout << "Now playing: ";
+        printSong(current);
+        cout << "\n";
+    }
+
+    void playNext() {
+        if (current == nullptr) {
+            cout << "Playlist is empty.\n";
+        } else if (current->next == nullptr) {
+            cout << "Already at the last song.\n";
+        } else {
+            current = current->next;  // move to next song
+            playCurrent();
+        }
+    }
+
+    void playPrevious() {
+        if (current == nullptr) {
+            cout << "Playlist is empty.\n";
+        } else if (current->prev == nullptr) {
+            cout << "Already at the first song.\n";
+        } else {
+            current = current->prev;  // move to previous song
+            playCurrent();
+        }
+    }
+
+    void playCompletePlaylist() {
+        if (head == nullptr) {
+            cout << "Playlist is empty.\n";
+            return;
+        }
+
+        cout << "\nPlaying complete playlist:\n";
+        current = head;             // start from the first song
+        while (current != nullptr) {
+            cout << "Now playing: ";
+            printSong(current);
+            cout << "\n";
+            if (current->next == nullptr)
+                break;              // leave current on the last song
+            current = current->next;
+        }
+    }
+
+    void repeatAll(int times) {
+        if (head == nullptr) {
+            cout << "Playlist is empty.\n";
+            return;
+        }
+        if (times <= 0) {
+            cout << "Repetitions must be greater than zero.\n";
+            return;
+        }
+
+        for (int round = 1; round <= times; round++) {
+            cout << "\n--- Repeat " << round << " of " << times << " ---\n";
+            current = head;          // restart from head each time
+            while (current != nullptr) {
+                cout << "Now playing: ";
+                printSong(current);
+                cout << "\n";
+                if (current->next == nullptr)
+                    break;
+                current = current->next;
+            }
+        }
+    }
+
+    void showCurrentSong() {
+        if (current == nullptr) {
+            cout << "No song selected. Playlist is empty.\n";
+            return;
+        }
+        cout << "Current song: ";
+        printSong(current);
+        cout << "\n";
+    }
+};
